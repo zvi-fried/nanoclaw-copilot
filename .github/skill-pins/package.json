@@ -19,6 +19,7 @@
     "@deltachat/stdio-rpc-server": "2.49.0",
     "@firecrawl/anydoc": "0.1.6",
     "@getdial/cli": "0.37.0",
+    "@github/copilot-sdk": "1.0.19",
     "@grpc/grpc-js": "1.14.5",
     "@grpc/proto-loader": "0.8.1",
     "@microsoft/teams.cli": "3.0.2",
@@ -124,6 +125,12 @@
       "sources": [
         ".claude/skills/add-dial-tool/SKILL.md nc:run",
         ".claude/skills/add-dial-tool/SKILL.md nc:json-merge"
+      ]
+    },
+    "@github/copilot-sdk": {
+      "version": "1.0.19",
+      "sources": [
+        ".claude/skills/add-copilot/SKILL.md nc:dep manager:bun cwd:container/agent-runner when:copilot_core_ready=yes"
       ]
     },
     "@grpc/grpc-js": {
