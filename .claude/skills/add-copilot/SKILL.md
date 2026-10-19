@@ -77,6 +77,7 @@ payload/container/agent-runner/src/providers/copilot.conformance.test.ts -> cont
 payload/container/agent-runner/src/providers/copilot.gateway.test.ts -> container/agent-runner/src/providers/copilot.gateway.test.ts
 payload/container/agent-runner/src/providers/copilot.memory.test.ts -> container/agent-runner/src/providers/copilot.memory.test.ts
 payload/container/agent-runner/src/providers/copilot.native.test.ts -> container/agent-runner/src/providers/copilot.native.test.ts
+payload/container/agent-runner/src/providers/copilot.quickstart.test.ts -> container/agent-runner/src/providers/copilot.quickstart.test.ts
 payload/container/agent-runner/src/providers/copilot.ts -> container/agent-runner/src/providers/copilot.ts
 payload/container/agent-runner/src/providers/copilot.turns.test.ts -> container/agent-runner/src/providers/copilot.turns.test.ts
 payload/scripts/copilot-auth.test.ts -> scripts/copilot-auth.test.ts
@@ -184,7 +185,14 @@ provider.
 ## Test
 
 - `bun test --isolate src/providers/copilot*.test.ts` in `container/agent-runner`
-  runs the unit, registration and conformance tests.
+  runs the unit, registration and conformance tests, and the runtime half of
+  the quickstart walk-through (`copilot.quickstart.test.ts`).
+- `pnpm exec vitest run .claude/skills/add-copilot/scripts/quickstart.test.ts`
+  walks the testing guide's setup steps through the real setup code on a copy
+  of the checkout, with GitHub, the gateways, the image build and the package
+  manager faked: install, plan lookup, token storage,
+  `ncl groups config update --provider copilot`, and each setup-side
+  troubleshooting message.
 - `COPILOT_NATIVE_TEST=1 bun test src/providers/copilot.native.test.ts` drives
   the real pinned runtime through the provider against a local scripted model:
   streaming, an MCP tool, a built-in tool, a skill, memory, and resume.
