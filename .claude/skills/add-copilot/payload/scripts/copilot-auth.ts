@@ -170,15 +170,16 @@ export async function runCopilotAuthStep(deps: CopilotAuthDeps = defaultDeps(pro
   );
   // The host currently configured; a new token's plan may move it.
   const current = configuredCopilotApiUrl(root);
-  const existing = await (
-    await deps.connect(copilotCredentialTarget(current))
-  ).find({
+  // keep() acts on the entry this connection's find() observed, so a blank
+  // answer keeps through the same connection.
+  const stored = await deps.connect(copilotCredentialTarget(current));
+  const existing = await stored.find({
     confirmHostChange: (previous, next) =>
       deps.confirm(`Move the stored Copilot credential from ${previous} to ${next}?`),
   });
   const token = await deps.promptToken(Boolean(existing?.reusable));
   if (!token) {
-    await (await deps.connect(copilotCredentialTarget(current))).keep();
+    await stored.keep();
     deps.info('Kept the stored Copilot credential.');
     return;
   }

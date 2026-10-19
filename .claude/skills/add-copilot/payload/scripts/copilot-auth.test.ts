@@ -109,12 +109,19 @@ function harness(options: { stored?: boolean; token: string; entitlement?: Copil
       options.entitlement ?? { status: 'ok', apiUrl: 'https://api.githubcopilot.com', plan: 'individual' },
     connect: async (target) => {
       targets.push(target);
+      // As the gateways do: keep() and save() act on the entry this connection's find() observed.
+      let found = false;
       const connection: GatewayCredentialConnection = {
-        find: async () => (options.stored ? { reusable: true } : null),
+        find: async () => {
+          found = true;
+          return options.stored ? { reusable: true } : null;
+        },
         save: async (value) => {
+          if (!found) throw new Error('save() before find()');
           saved.push({ host: target.host, value });
         },
         keep: async () => {
+          if (!found) throw new Error('keep() before find()');
           log.push(`keep ${target.host}`);
         },
       };
